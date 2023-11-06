@@ -8,15 +8,10 @@ import { faAngleDoubleRight, faAngleLeft, faAngleRight, faAngleDoubleLeft } from
 import ReactSwitch from 'react-switch';
 
 export default function App() {
-  const now: EtDatetime = new EtDatetime();
-  console.log(now);
 
-  // Get the current Gregorian date
   const currentDate = new Date();
 
   const currentEthiopianDate = new EtDatetime(currentDate.getTime());
-  console.log("The current ethiopian date is" + currentEthiopianDate);
-
   const [ethiopianCalendar, setEthiopianCalendar] = useState(new ETC(currentEthiopianDate.year, currentEthiopianDate.month, currentEthiopianDate.day));
 
 
@@ -61,9 +56,10 @@ export default function App() {
   const gregorian: Date = new Date(ethiopian.moment);
   console.log(gregorian);
 
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(currentDate);
   const [ethiopianDate, setEthiopianDate] = useState('');
   const [gregorianDate, setGregorianDate] = useState('');
+  // const [ethiopianNumber, setEthiopianNumber] = useState(''); 
 
   const ethiopianMonths = [
     'መስከረም', 'ጥቅምት', 'ኅዳር', 'ታህሳስ', 'ጥር', 'የካቲት',
@@ -109,18 +105,48 @@ export default function App() {
   const firstDayOfWeek = monthDays[0][3];
   const emptyDays = daysOfWeek.indexOf(firstDayOfWeek);
 
+// const handleNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+//   const EthiopianNumber = ConvertToEthiopic(parseInt(e.target.value));
 
+//   setEthiopianNumber(EthiopianNumber.toString());
+
+
+// }
+
+const currentDateEthio = ConvertToEthiopic(currentEthiopianDate.day)
+
+
+  const years = Array.from({ length: 100 }, (_, i) => 1970 + i);
   return (
     <div className='m-0 flex flex-wrap place-items-center min-w-fit min-h-[100vh] items-center justify-center '>
       <div >
         <div style={{ fontSize: '1em', margin: '3px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <FontAwesomeIcon icon={faAngleDoubleLeft} onClick={handlePrevYear} style={{ fontSize: '1em', cursor: 'pointer', padding: '30px' }} />
-          <FontAwesomeIcon icon={faAngleLeft} onClick={handlePrevMonth} style={{ fontSize: '1em', cursor: 'pointer' , padding:"30px"}} />
-          <h1 className="text-white flex-1 text-center m-0">
-  {ethiopianMonths[ethiopianCalendar.month - 1]} {ethiopianCalendar.year}
-</h1>
-          <FontAwesomeIcon icon={faAngleRight}  size="xl"onClick={handleNextMonth} style={{ fontSize: '1em', cursor: 'pointer', padding: '30px'}} />
-          <FontAwesomeIcon icon={faAngleDoubleRight} onClick={handleNextYear} style={{ fontSize: '1em', cursor: 'pointer', padding:"30px" }} />
+          <FontAwesomeIcon icon={faAngleLeft} onClick={handlePrevMonth} style={{ fontSize: '1em', cursor: 'pointer', padding: "30px" }} />
+          <h1 className="text-white flex-1 text-center m-0 p-4">
+            {ethiopianMonths[ethiopianCalendar.month - 1]}
+          </h1>
+          <div>
+            <select
+              className="p-2 border border-white rounded-lg shadow-md"
+              onChange={(e) => {
+                const selectedYear = parseInt(e.target.value);
+                setEthiopianCalendar(new ETC(selectedYear, ethiopianCalendar.month, ethiopianCalendar.day));
+              }}
+              value={ethiopianCalendar.year} // use the year from the ethiopianCalendar state
+              style={{ backgroundColor: '#5A4AC2', color: 'white' }}
+            >
+              {years.map((year) => (
+                <option key={year} value={year}>
+                  {year}
+                </option>
+              ))}
+            </select>
+          </div>
+
+
+          <FontAwesomeIcon icon={faAngleRight} size="xl" onClick={handleNextMonth} style={{ fontSize: '1em', cursor: 'pointer', padding: '30px' }} />
+          <FontAwesomeIcon icon={faAngleDoubleRight} onClick={handleNextYear} style={{ fontSize: '1em', cursor: 'pointer', padding: "30px" }} />
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', color: "black", borderRadius: '10px', backgroundColor: 'white' }}>
           {daysOfWeek.map((day, index) => (
@@ -131,36 +157,61 @@ export default function App() {
           {Array(emptyDays).fill(null).map((_, index) => (
             <div key={index} style={{ border: '1px', padding: '10px', color: "black", display: 'flex', alignItems: 'center', justifyContent: 'center' }} />
           ))}
-         {monthDays.map((day, index) => (
-  <div 
-    key={index} 
-    className={`p-2 text-black font-bold flex items-center justify-center 
-    ${day[2] === currentEthiopianDate ? 'bg-black text-white' : 'bg-transparent'}`}
-  >
-    {isGeez ? day[2] : index + 1}
-  </div>
-))}
+
+          {monthDays.map((day, index) => (
+            <div
+              key={index}
+              className={`p-2 text-black font-bold flex flex-col items-center justify-center ${day[2] === currentDateEthio ? ` border  border-blue-800 rounded-full shadow-lg` : 'bg-transparent'}`}
+              title={day[2] === currentDateEthio && day[0] === currentEthiopianDate.year ? 'Today' : ''}
+            >
+            
+              {isGeez ? day[2] : index + 1}
+            </div>
+          ))}
+
+
         </div>
         <br />
-      <div className=' flex items-center space-x-4'>
-      <ReactSwitch 
-  onChange={() => setIsGeez(!isGeez)} 
-  checked={isGeez} 
-  handleDiameter={30} 
-  uncheckedIcon={false} 
-  checkedIcon={false} 
-/>
-<span className={`text-black-700 font-medium`}>{isGeez ? 'Other Numbers' : 'Geez Numbers'}</span>
-      </div>
+        <div className=' flex items-center space-x-4'>
+          <ReactSwitch
+            onChange={() => setIsGeez(!isGeez)}
+            checked={isGeez}
+            handleDiameter={30}
+            uncheckedIcon={false}
+            checkedIcon={false}
+          />
+          <span className={`text-black-700 font-medium`}>{isGeez ? 'Other Numbers' : 'Geez Numbers'}</span>
+        </div>
       </div>
       <div className='border border-black bg-white p-5 shadow-md rounded-lg m-2'>
-  <div className='max-w-xs mt-5'>
-    <h1 className='text-purple-700 text-2xl pb-2'>Ethiopian Date Convertor</h1>
-    <DatePicker selected={selectedDate} onChange={handleDateChange} className='w-4/5' />
-    <p className='text-purple-700 text-sm my-2'>Selected Gregorian date: {gregorianDate}</p>
-    <p className='text-purple-700 text-sm my-2'>Equivalent Ethiopian date: {ethiopianDate}</p>
-  </div>
-</div>
+        <div className='max-w-xs mt-3'>
+          <h1 className='text-purple-800 text-2xl pb-2'>Ethiopian Date Convertor</h1>
+          <DatePicker
+            selected={selectedDate}
+            onChange={handleDateChange}
+            className='w-4/5 bg-white text-black border-radius-5'
+          />
+
+
+          <p className='text-black font-bold text-sm my-2'>Selected Gregorian date: {gregorianDate}</p>
+          <p className='text-black font-bold text-sm my-2'>Equivalent Ethiopian date: {ethiopianDate}</p>
+        </div>
+      </div>
+
+      {/* <div className='border border-black bg-white p-5 shadow-md rounded-lg m-2'>
+        <div className='max-w-xs mt-3'>
+          <h1 className='text-purple-800 text-2xl pb-2'>Ethiopian Number Convertor</h1>
+          <input
+            type='number'
+            value={ethiopianNumber}
+            onChange={handleNumberChange}
+            className='w-4/5 bg-white text-black border-radius-5'
+          />
+
+          <p className='text-black font-bold text-sm my-2'>Selected Gregorian date: {ethiopianNumber}</p>
+          <p className='text-black font-bold text-sm my-2'>Equivalent Ethiopian date: {ethiopianDate}</p>
+        </div>
+      </div> */}
 
     </div>
   );
