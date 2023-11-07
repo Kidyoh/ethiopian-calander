@@ -30,14 +30,14 @@ export default function App() {
 
 
   let bh: BahireHasab = new BahireHasab(2016);
-  bh.getEvangelist(true); // => ሉቃስ
+  bh.getEvangelist(true); 
 
-  bh.getSingleBealOrTsom('ትንሳኤ'); // {month: ሚያዝያ, date: 20}
+  bh.getSingleBealOrTsom('ትንሳኤ');
 
   bh.metkih
 
 
-  const allFastings = bh.allAtswamat; // => List of All fasting and Movable holidays
+  const allFastings = bh.allAtswamat;
   console.log(allFastings);
 
 
@@ -59,7 +59,6 @@ export default function App() {
   const [selectedDate, setSelectedDate] = useState(currentDate);
   const [ethiopianDate, setEthiopianDate] = useState('');
   const [gregorianDate, setGregorianDate] = useState('');
-  // const [ethiopianNumber, setEthiopianNumber] = useState(''); 
 
   const ethiopianMonths = [
     'መስከረም', 'ጥቅምት', 'ኅዳር', 'ታህሳስ', 'ጥር', 'የካቲት',
@@ -107,8 +106,8 @@ export default function App() {
 
   const currentDateEthio = ConvertToEthiopic(currentEthiopianDate.day)
 
-  const currentDay = currentDate.getDate(); // Get current day
-  const currentMonth = currentDate.getMonth() + 1; // Get current month (Note: Month is 0-based)
+  const currentDay = currentDate.getDate();
+  const currentMonth = currentDate.getMonth() + 1; 
   const currentYear = currentDate.getFullYear();
 
 
@@ -131,10 +130,10 @@ export default function App() {
                 const selectedMonth = parseInt(e.target.value);
                 let selectedDay = ethiopianCalendar.day;
                 if (selectedMonth === 13) {
-                  const isLeapYear = ethiopianCalendar.year % 4 === 3; // Ethiopian leap year check
+                  const isLeapYear = ethiopianCalendar.year % 4 === 3; 
                   const pagumeDays = isLeapYear ? 6 : 5;
                   if (selectedDay > pagumeDays) {
-                    selectedDay = pagumeDays; // adjust the day for Pagume
+                    selectedDay = pagumeDays; 
                   }
                 }
                 setEthiopianCalendar(new ETC(ethiopianCalendar.year, selectedMonth, selectedDay));
@@ -157,7 +156,7 @@ export default function App() {
                 const selectedYear = parseInt(e.target.value);
                 setEthiopianCalendar(new ETC(selectedYear, ethiopianCalendar.month, ethiopianCalendar.day));
               }}
-              value={ethiopianCalendar.year} // use the year from the ethiopianCalendar state
+              value={ethiopianCalendar.year} 
               style={{ backgroundColor: '#5A4AC2', color: 'white' }}
             >
               {years.map((year) => (
