@@ -114,6 +114,10 @@ export default function App() {
   const currentEthiopianDay = currentEthiopianDate.day;
   const currentEthiopianYear = currentEthiopianDate.year;
 
+  const handleToday = () =>{
+    setEthiopianCalendar(new ETC(currentEthiopianDate.year, currentEthiopianDate.month, currentEthiopianDate.day));
+  }
+
 
 
   const years = Array.from({ length: 100 }, (_, i) => 1970 + i);
@@ -204,7 +208,8 @@ export default function App() {
 
         </div>
         <br />
-        <div className=' flex items-center space-x-4'>
+        <div className='flex flex-row gap-72'>
+        <div className=' flex items-center space-x-2'>
           <ReactSwitch
             onChange={() => setIsGeez(!isGeez)}
             checked={isGeez}
@@ -213,6 +218,10 @@ export default function App() {
             checkedIcon={false}
           />
           <span className={`text-black-700 font-medium`}>{isGeez ? 'Other Numbers' : 'Geez Numbers'}</span>
+          
+        </div>
+        <a onClick={handleToday} className='cursor-pointer text-black-700'>Today</a>
+       
         </div>
       </div>
       <div className='border border-black bg-white p-5 shadow-md rounded-lg m-2'>
