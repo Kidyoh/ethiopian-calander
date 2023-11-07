@@ -220,7 +220,7 @@ export default function App() {
           <span className={`text-black-700 font-medium`}>{isGeez ? 'Other Numbers' : 'Geez Numbers'}</span>
           
         </div>
-        <a onClick={handleToday} className='cursor-pointer text-black-700'>Today</a>
+        <a onClick={handleToday} className='cursor-pointer '>Today</a>
        
         </div>
       </div>
