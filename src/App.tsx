@@ -129,9 +129,17 @@ export default function App() {
               className="p-2 border border-white rounded-lg shadow-md"
               onChange={(e) => {
                 const selectedMonth = parseInt(e.target.value);
-                setEthiopianCalendar(new ETC(ethiopianCalendar.year, selectedMonth, ethiopianCalendar.day));
+                let selectedDay = ethiopianCalendar.day;
+                if (selectedMonth === 13) {
+                  const isLeapYear = ethiopianCalendar.year % 4 === 3; // Ethiopian leap year check
+                  const pagumeDays = isLeapYear ? 6 : 5;
+                  if (selectedDay > pagumeDays) {
+                    selectedDay = pagumeDays; // adjust the day for Pagume
+                  }
+                }
+                setEthiopianCalendar(new ETC(ethiopianCalendar.year, selectedMonth, selectedDay));
               }}
-              value={ethiopianCalendar.month} // use the month from the ethiopianCalendar state
+              value={ethiopianCalendar.month}
               style={{ backgroundColor: '#5A4AC2', color: 'white' }}
             >
               {ethiopianMonths.map((month, index) => (
@@ -141,6 +149,7 @@ export default function App() {
               ))}
             </select>
           </div>
+
           <div>
             <select
               className="p-2 border border-white rounded-lg shadow-md"
@@ -177,8 +186,8 @@ export default function App() {
             <div
               key={index}
               className={`p-2 text-black font-bold flex flex-col items-center justify-center ${day[2] === currentDateEthio && day[0] === currentEthiopianDate.year && day[1] === currentEthiopianDate.month
-                  ? `border border-blue-800 rounded-full shadow-lg`
-                  : 'bg-transparent'
+                ? `border border-blue-800 rounded-full shadow-lg`
+                : 'bg-transparent'
                 }`}
               title={
                 day[2] === currentDateEthio && day[0] === currentEthiopianDate.year
