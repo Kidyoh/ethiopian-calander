@@ -105,15 +105,16 @@ export default function App() {
   const firstDayOfWeek = monthDays[0][3];
   const emptyDays = daysOfWeek.indexOf(firstDayOfWeek);
 
-// const handleNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-//   const EthiopianNumber = ConvertToEthiopic(parseInt(e.target.value));
+  const currentDateEthio = ConvertToEthiopic(currentEthiopianDate.day)
 
-//   setEthiopianNumber(EthiopianNumber.toString());
+  const currentDay = currentDate.getDate(); // Get current day
+  const currentMonth = currentDate.getMonth() + 1; // Get current month (Note: Month is 0-based)
+  const currentYear = currentDate.getFullYear();
 
 
-// }
+  const currentEthiopianDay = currentEthiopianDate.day;
+  const currentEthiopianYear = currentEthiopianDate.year;
 
-const currentDateEthio = ConvertToEthiopic(currentEthiopianDate.day)
 
 
   const years = Array.from({ length: 100 }, (_, i) => 1970 + i);
@@ -123,9 +124,23 @@ const currentDateEthio = ConvertToEthiopic(currentEthiopianDate.day)
         <div style={{ fontSize: '1em', margin: '3px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <FontAwesomeIcon icon={faAngleDoubleLeft} onClick={handlePrevYear} style={{ fontSize: '1em', cursor: 'pointer', padding: '30px' }} />
           <FontAwesomeIcon icon={faAngleLeft} onClick={handlePrevMonth} style={{ fontSize: '1em', cursor: 'pointer', padding: "30px" }} />
-          <h1 className="text-white flex-1 text-center m-0 p-4">
-            {ethiopianMonths[ethiopianCalendar.month - 1]}
-          </h1>
+          <div>
+            <select
+              className="p-2 border border-white rounded-lg shadow-md"
+              onChange={(e) => {
+                const selectedMonth = parseInt(e.target.value);
+                setEthiopianCalendar(new ETC(ethiopianCalendar.year, selectedMonth, ethiopianCalendar.day));
+              }}
+              value={ethiopianCalendar.month} // use the month from the ethiopianCalendar state
+              style={{ backgroundColor: '#5A4AC2', color: 'white' }}
+            >
+              {ethiopianMonths.map((month, index) => (
+                <option key={month} value={index + 1}>
+                  {month}
+                </option>
+              ))}
+            </select>
+          </div>
           <div>
             <select
               className="p-2 border border-white rounded-lg shadow-md"
@@ -161,10 +176,19 @@ const currentDateEthio = ConvertToEthiopic(currentEthiopianDate.day)
           {monthDays.map((day, index) => (
             <div
               key={index}
-              className={`p-2 text-black font-bold flex flex-col items-center justify-center ${day[2] === currentDateEthio ? ` border  border-blue-800 rounded-full shadow-lg` : 'bg-transparent'}`}
-              title={day[2] === currentDateEthio && day[0] === currentEthiopianDate.year ? 'Today' : ''}
+              className={`p-2 text-black font-bold flex flex-col items-center justify-center ${day[2] === currentDateEthio && day[0] === currentEthiopianDate.year && day[1] === currentEthiopianDate.month
+                  ? `border border-blue-800 rounded-full shadow-lg`
+                  : 'bg-transparent'
+                }`}
+              title={
+                day[2] === currentDateEthio && day[0] === currentEthiopianDate.year
+                  ? `Today: ${currentYear}-${currentMonth}-${currentDay}
+          \nEthiopian: ${currentEthiopianYear}-${ethiopianMonths[ethiopianCalendar.month - 1]}-${currentEthiopianDay}`
+
+
+                  : ''
+              }
             >
-            
               {isGeez ? day[2] : index + 1}
             </div>
           ))}
@@ -197,21 +221,6 @@ const currentDateEthio = ConvertToEthiopic(currentEthiopianDate.day)
           <p className='text-black font-bold text-sm my-2'>Equivalent Ethiopian date: {ethiopianDate}</p>
         </div>
       </div>
-
-      {/* <div className='border border-black bg-white p-5 shadow-md rounded-lg m-2'>
-        <div className='max-w-xs mt-3'>
-          <h1 className='text-purple-800 text-2xl pb-2'>Ethiopian Number Convertor</h1>
-          <input
-            type='number'
-            value={ethiopianNumber}
-            onChange={handleNumberChange}
-            className='w-4/5 bg-white text-black border-radius-5'
-          />
-
-          <p className='text-black font-bold text-sm my-2'>Selected Gregorian date: {ethiopianNumber}</p>
-          <p className='text-black font-bold text-sm my-2'>Equivalent Ethiopian date: {ethiopianDate}</p>
-        </div>
-      </div> */}
 
     </div>
   );
