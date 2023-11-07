@@ -222,7 +222,7 @@ export default function App() {
           <DatePicker
             selected={selectedDate}
             onChange={handleDateChange}
-            className='w-4/5 bg-white text-black border-radius-5'
+            className='w-4/5 border border-black rounded-md bg-white text-black p-1 '
           />
 
 
