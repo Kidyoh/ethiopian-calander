@@ -188,7 +188,7 @@ export default function App() {
           {monthDays.map((day, index) => (
             <div
               key={index}
-              className={`p-2 text-black font-bold flex flex-col items-center justify-center ${day[2] === currentDateEthio && day[0] === currentEthiopianDate.year && day[1] === currentEthiopianDate.month
+              className={`p-2 mb-2 text-black font-bold flex flex-col items-center justify-center  ${day[2] === currentDateEthio && day[0] === currentEthiopianDate.year && day[1] === currentEthiopianDate.month
                 ? `border border-blue-800 rounded-full shadow-lg`
                 : 'bg-transparent'
                 }`}
